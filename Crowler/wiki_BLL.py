@@ -9,17 +9,18 @@ import re
 
 
 # values Init
-_limitLenghtShow   = 2
-_limitLenghtShow **= 2
-_words_print = []
-dfTokenDoc = ''
-State = False
-dfToken = ''
-dfIndex = ''
-Command = ''
-Search = []
-Doc = ''
-db = []
+_limitLenghtShow   =  2
+_limitLenghtShow **=  2
+_words_print       = []
+checkList          = []
+Search             = []
+db                 = []
+dfTokenDoc         = ''
+dfToken            = ''
+dfIndex            = ''
+Command            = ''
+Doc                = ''
+State              =  0
 
 def CleanData (_command):
 
@@ -126,36 +127,32 @@ while Command != 'exit()':
     for w in Word: Search.append( TokenInit( CleanData(w) ) )
 
     # :) does it exist !!?
-    checkList = []
-    for sl in Search: 
-        tmp = []
-        # Select by TokenId of Token Table
-        for s in sl: tmp.append( dfToken['Id'].where(dfToken['Token']==s).dropna().tolist() )
-        checkList.append(tmp)
+    # Select by TokenId of Token Table
+    for sl in Search:tmp = [],(tmp.append( dfToken['Id'].where(dfToken['Token']==s).dropna().tolist() ) for s in sl), checkList.append(tmp)
     
     # If available Command => Check Index Number and creat Word
     for vl in checkList :
         tmp = []
         # If Not Null :/
         if vl and vl[0] != [] :
-            # List Step Search
-            for v in vl :
-                if v != [] :
-                    # Select IndexId of Marge Table
-                    tmp.append(set(dfIndex['Index'].where(dfIndex['TokenId']==int(v[0])).dropna().tolist()))
+            # Select IndexId of Marge Table
+            (tmp.append(set(dfIndex['Index'].where(dfIndex['TokenId']==int(v[0])).dropna().tolist())) for v in vl if v != [])
+            
             #-----------Finde Words together--------------
             _lenght = len(tmp)
                 # [x] =>x-index : for equals Words together index
             tmp = list((set(map(lambda x : x-i , tmp[i])) for i in range(len(tmp))))
-                # {x} => filter equls index : for finde intersection
-            while(len(tmp) > 1): tmp = [ tmp[x]&tmp[x+1] for x in range(len(tmp)-1)]
-            tmp.append(_lenght)
+                # {x} => filter equls index : for finde intersection 
+            while(len(tmp) > 1): tmp = [ tmp[x]&tmp[x+1] for x in range(len(tmp)-1)] ,tmp.append(_lenght)
+                # [x]finde => not False
             if len(tmp[0]) > 0 : _words_print.append(tmp)
+
     # Show Sentence
-    if not _words_print or State :#if Command is contane And =>
-        # Check Contane All Word
+    if not _words_print or State :#if 'and' in Command || _words Finde length == 0  =>
+        # Compare the length of the input command with the tokens found
         if len(_words_print) != len(Search) and not('\"' in Command or '\'' in Command) :
             print('No words found')
             continue
-    for v in _words_print:# Finde And print, {_limitLenghtShow} + {_word_Print}
+
+    for v in _words_print:# Finde And print, {_limitLenghtShow BeforeToken}+ {_word_Print} + {_limitLenghtShow AfterToken}
         ShowSentence(v[0],v[1])
