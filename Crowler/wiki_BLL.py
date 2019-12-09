@@ -96,12 +96,15 @@ while Command != 'exit()':
     Word = []
     Search = []
     _words_print = []
+    checkList = []
+    _lenght = 0
 
     # Impot
     Command = input('Please enter Command(exit() to end the program)>>>  ').strip()
 
     # Exit Check
-    if Command == 'exit()': exit()
+    if Command == 'exit()': 
+        exit()
 
     # TextCheck
     elif 'or' in Command.lower() :
@@ -128,43 +131,39 @@ while Command != 'exit()':
 
     # :) does it exist !!?
     # Select by TokenId of Token Table
-<<<<<<< HEAD
     for sl in Search:
         tmp = []
-        (tmp.append( dfToken['Id'].where(dfToken['Token']==s).dropna().tolist() ) for s in sl)
+        for s in sl:
+            tmp.append( dfToken['Id'].where(dfToken['Token']==s).dropna().tolist() )
         checkList.append(tmp)
-        
-=======
-    for sl in Search:tmp = [],(tmp.append( dfToken['Id'].where(dfToken['Token']==s).dropna().tolist() ) for s in sl), checkList.append(tmp)
     
->>>>>>> 2e7062d78b107677607497346b39f1cb792f0214
     # If available Command => Check Index Number and creat Word
     for vl in checkList :
         tmp = []
         # If Not Null :/
         if vl and vl[0] != [] :
             # Select IndexId of Marge Table
-            (tmp.append(set(dfIndex['Index'].where(dfIndex['TokenId']==int(v[0])).dropna().tolist())) for v in vl if v != [])
+            for v in vl:
+                if v != []:
+                    tmp.append(set(dfIndex['Index'].where(dfIndex['TokenId']==int(v[0])).dropna().tolist()))
             
             #-----------Finde Words together--------------
             _lenght = len(tmp)
                 # [x] =>x-index : for equals Words together index
             tmp = list((set(map(lambda x : x-i , tmp[i])) for i in range(len(tmp))))
                 # {x} => filter equls index : for finde intersection 
-            while(len(tmp) > 1): tmp = [ tmp[x]&tmp[x+1] for x in range(len(tmp)-1)] ,tmp.append(_lenght)
+            while(len(tmp) > 1): 
+                tmp = [ tmp[x]&tmp[x+1] for x in range(len(tmp)-1)] 
+            tmp.append(_lenght)
                 # [x]finde => not False
             if len(tmp[0]) > 0 : _words_print.append(tmp)
 
     # Show Sentence
-    if not _words_print or State :#if 'and' in Command || _words Finde length == 0  =>
+    if not len(_words_print) or State :#if 'and' in Command || _words Finde length == 0  =>
         # Compare the length of the input command with the tokens found
-        if len(_words_print) != len(Search) and not('\"' in Command or '\'' in Command) :
+        if not len(_words_print) or (len(_words_print) != len(Search) and not('\"' in Command or '\'' in Command)) :
             print('No words found')
             continue
 
     for v in _words_print:# Finde And print, {_limitLenghtShow BeforeToken}+ {_word_Print} + {_limitLenghtShow AfterToken}
-<<<<<<< HEAD
         ShowSentence(v[0],v[1])
-=======
-        ShowSentence(v[0],v[1])
->>>>>>> 2e7062d78b107677607497346b39f1cb792f0214
