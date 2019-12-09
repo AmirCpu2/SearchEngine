@@ -128,11 +128,16 @@ while Command != 'exit()':
 
     # :) does it exist !!?
     # Select by TokenId of Token Table
+<<<<<<< HEAD
     for sl in Search:
         tmp = []
         (tmp.append( dfToken['Id'].where(dfToken['Token']==s).dropna().tolist() ) for s in sl)
         checkList.append(tmp)
         
+=======
+    for sl in Search:tmp = [],(tmp.append( dfToken['Id'].where(dfToken['Token']==s).dropna().tolist() ) for s in sl), checkList.append(tmp)
+    
+>>>>>>> 2e7062d78b107677607497346b39f1cb792f0214
     # If available Command => Check Index Number and creat Word
     for vl in checkList :
         tmp = []
@@ -158,4 +163,8 @@ while Command != 'exit()':
             continue
 
     for v in _words_print:# Finde And print, {_limitLenghtShow BeforeToken}+ {_word_Print} + {_limitLenghtShow AfterToken}
+<<<<<<< HEAD
         ShowSentence(v[0],v[1])
+=======
+        ShowSentence(v[0],v[1])
+>>>>>>> 2e7062d78b107677607497346b39f1cb792f0214
