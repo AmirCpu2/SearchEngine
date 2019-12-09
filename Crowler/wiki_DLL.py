@@ -11,15 +11,17 @@ import re
 def SaveTable (DataTable):
 
     # Head
-    fieldnames = ['Token', 'TokenIndex']
+    fieldnames = ['Id', 'Token', 'TokenId', 'Index']
     
     # Creat Data Frame
-    data_frameToken = pd.DataFrame({fieldnames[0]: DataTable[0]})
-    data_frameIndex = pd.DataFrame({fieldnames[1]: DataTable[1]})
-
+    data_frameToken = pd.DataFrame({fieldnames[0]: range(len(DataTable[0])), fieldnames[1]: DataTable[0]})
+    data_frameIndex = pd.DataFrame({fieldnames[2]: list(j[0] for j in DataTable[1]) ,fieldnames[3]: list(j[1] for j in DataTable[1])})
+    data_frameTokenDoc = pd.DataFrame({fieldnames[0]: range(len(DataTable[2])), fieldnames[1]: DataTable[2]})
+    
     # DataFrame To CSV
     data_frameToken.to_csv("PandaDBToken.csv", sep=",", encoding='utf-8')
     data_frameIndex.to_csv("PandaDBIndex.csv", sep=",", encoding='utf-8')
+    data_frameTokenDoc.to_csv("PandaDBTokenDoc.csv", sep=",", encoding='utf-8')
 
 # Base Function
 def SaveDoc (DataDoc):
@@ -54,6 +56,7 @@ clean = bleach.clean(Token).replace('[ویرایش]','')
 clean = re.sub(r'http\S+', '', clean)
 clean = re.sub(r'\\S+', '', clean)
 clean = clean.replace(u'\ufeff', '')
+clean = clean.replace(u'\u200c', '')
 clean = unicodedata.normalize("NFKD", clean)
 
 # Text Noramalizetion
@@ -92,4 +95,4 @@ TokenIndexMarge = []
 for i in range(len(TokenIndex)): TokenIndexMarge.extend(list([i,j] for j in TokenIndex[i]))
 
 # Save CSV DB
-SaveTable([Token, TokenIndexMarge])
+SaveTable([Token, TokenIndexMarge, finallyList])#TokenTemp])
